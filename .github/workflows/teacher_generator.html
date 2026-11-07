@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สร้าง QR Code เช็กชื่อ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Library สำหรับสร้าง QR Code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white p-8 rounded-xl shadow-md max-w-md w-full text-center">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">ระบบสร้าง QR Code เช็กชื่อ</h1>
+    
+    <div class="mb-4 text-left">
+      <label class="block text-gray-700 font-medium mb-1">ชื่อวิชา / คาบเรียน:</label>
+      <input type="text" id="subjectInput" value="CS101-คอมพิวเตอร์เบื้องต้น" class="w-full p-2 border rounded-md">
+    </div>
+
+    <button onclick="generateQR()" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+      สร้าง QR Code
+    </button>
+
+    <div id="qrcode" class="flex justify-center my-6"></div>
+    <p id="qrUrlText" class="text-xs text-gray-500 break-all"></p>
+  </div>
+
+  <script>
+    function generateQR() {
+      const subject = document.getElementById('subjectInput').value;
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = ""; // ล้างค่าเดิม
+
+      // ลิงก์ที่จะส่งนักเรียนไปหน้าเช็กชื่อ (เปลี่ยน domain/path ให้ตรงกับที่โฮสต์ไว้)
+      const baseUrl = window.location.href.replace('teacher_generator.html', 'student_checkin.html');
+      const targetUrl = `${baseUrl}?subject=${encodeURIComponent(subject)}`;
+
+      new QRCode(qrContainer, {
+        text: targetUrl,
+        width: 200,
+        height: 200
+      });
+
+      document.getElementById('qrUrlText').innerText = targetUrl;
+    }
+  </script>
+</body>
+</html>
